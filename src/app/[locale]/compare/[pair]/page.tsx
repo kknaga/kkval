@@ -40,8 +40,8 @@ export async function generateMetadata({
   }
   const { a, b, slug } = canonicalizeComparePair(parsed.rawA, parsed.rawB);
   const [profA, profB] = await Promise.all([
-    getFullCompanyProfile(a),
-    getFullCompanyProfile(b),
+    getFullCompanyProfile(a, { allowOnDemand: true }),
+    getFullCompanyProfile(b, { allowOnDemand: true }),
   ]);
   const bothIndexable = Boolean(
     profA?.company.isIndexable && profB?.company.isIndexable,
@@ -74,8 +74,8 @@ export default async function ComparePairPage({ params }: PageProps) {
   }
 
   const [profA, profB] = await Promise.all([
-    getFullCompanyProfile(a),
-    getFullCompanyProfile(b),
+    getFullCompanyProfile(a, { allowOnDemand: true }),
+    getFullCompanyProfile(b, { allowOnDemand: true }),
   ]);
 
   if (!profA || !profB) {

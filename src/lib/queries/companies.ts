@@ -1,3 +1,4 @@
+import { ensureCompanyIngested } from "@/lib/sec/on-demand";
 import { and, asc, desc, eq, gte, ilike, isNotNull, lt, ne, or, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
@@ -81,7 +82,7 @@ export async function searchCompanies(
   }
 }
 
-export async function findCompanyByTickerOrAlias(
+async function queryCompanyByTickerOrAlias(
   rawTicker: string,
 ): Promise<CompanyRow | null> {
   const upper = rawTicker.trim().toUpperCase();
@@ -105,10 +106,24 @@ export async function findCompanyByTickerOrAlias(
   }
 }
 
+export async function findCompanyByTickerOrAlias(
+  rawTicker: string,
+  options: { allowOnDemand?: boolean } = {},
+): Promise<CompanyRow | null> {
+  const existing = await queryCompanyByTickerOrAlias(rawTicker);
+  if (existing) return existing;
+  if (!options.allowOnDemand) return null;
+
+  const ingested = await ensureCompanyIngested(rawTicker);
+  if (!ingested) return null;
+  return queryCompanyByTickerOrAlias(rawTicker);
+}
+
 export async function getFullCompanyProfile(
   rawTicker: string,
+  options: { allowOnDemand?: boolean } = {},
 ): Promise<FullCompanyProfile | null> {
-  const company = await findCompanyByTickerOrAlias(rawTicker);
+  const company = await findCompanyByTickerOrAlias(rawTicker, options);
   if (!company) return null;
 
   try {

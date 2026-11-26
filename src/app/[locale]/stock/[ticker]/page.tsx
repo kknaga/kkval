@@ -41,7 +41,9 @@ export async function generateMetadata({
   const { locale: rawLocale, ticker: rawTicker } = await params;
   const locale = normalizeLocaleSlug(rawLocale) ?? "en";
   const msg = getMessages(locale);
-  const company = await findCompanyByTickerOrAlias(rawTicker);
+  const company = await findCompanyByTickerOrAlias(rawTicker, {
+    allowOnDemand: true,
+  });
 
   if (!company) {
     return {
@@ -83,7 +85,9 @@ export default async function StockPage({ params }: PageProps) {
   if (!locale) notFound();
 
   const msg = getMessages(locale);
-  const profile = await getFullCompanyProfile(rawTicker);
+  const profile = await getFullCompanyProfile(rawTicker, {
+    allowOnDemand: true,
+  });
   if (!profile) {
     notFound();
   }
