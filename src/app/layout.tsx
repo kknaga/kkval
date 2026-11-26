@@ -51,7 +51,7 @@ export default async function RootLayout({
   const headerList = await headers();
   const locale =
     normalizeLocaleSlug(headerList.get("x-kkval-locale")) ?? DEFAULT_LOCALE;
-  const gtmId = process.env.NEXT_PUBLIC_GTM_ID?.trim();
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID?.trim() || "GTM-MPSFVHMS";
   const adsenseClient = process.env.NEXT_PUBLIC_ADSENSE_CLIENT?.trim();
 
   return (
