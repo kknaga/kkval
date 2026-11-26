@@ -39,6 +39,19 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  openGraph: {
+    type: "website",
+    siteName: "kkval.com",
+    title: "kkval.com | SEC Company Health Check, Cash Runway & Dilution",
+    description:
+      "Free SEC EDGAR health checks for US-listed stocks: cash runway, share dilution, free cash flow, Form 4 insider trades, and 13F institutional holders.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "kkval.com | SEC Company Health Check, Cash Runway & Dilution",
+    description:
+      "Free SEC EDGAR health checks for US-listed stocks: cash runway, share dilution, free cash flow, Form 4 insider trades, and 13F institutional holders.",
+  },
 };
 
 const FOUC_SCRIPT = `try{var s=localStorage.getItem("color-scheme");if(s==="light"||s==="dark"){document.querySelector('meta[name="color-scheme"]').content=s;}}catch(e){}`;

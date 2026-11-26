@@ -4,15 +4,13 @@ import { notFound, permanentRedirect } from "next/navigation";
 import {
   formatCompactCurrency,
   formatCompactNumber,
+  formatPercent,
   getLocaleMeta,
   localizePath,
   normalizeLocaleSlug,
 } from "@/lib/i18n/locales";
 import { formatMessage, getMessages } from "@/lib/i18n/messages";
-import {
-  findCompanyByTickerOrAlias,
-  getFullCompanyProfile,
-} from "@/lib/queries/companies";
+import { getFullCompanyProfile } from "@/lib/queries/companies";
 import { buildSecFilingUrl } from "@/lib/sec/client";
 import {
   absoluteUrl,
@@ -41,27 +39,59 @@ export async function generateMetadata({
   const { locale: rawLocale, ticker: rawTicker } = await params;
   const locale = normalizeLocaleSlug(rawLocale) ?? "en";
   const msg = getMessages(locale);
-  const company = await findCompanyByTickerOrAlias(rawTicker, {
+  const profile = await getFullCompanyProfile(rawTicker, {
     allowOnDemand: true,
   });
 
-  if (!company) {
+  if (!profile) {
     return {
       title: `${rawTicker.toUpperCase()} | kkval.com`,
       robots: { index: false, follow: false },
     };
   }
 
+  const { company, snapshot } = profile;
+  const currency = company.reportingCurrency || "USD";
   const basePath = `/stock/${company.ticker}`;
   const alternates = buildAbsoluteLocaleAlternates(basePath, locale);
   const title = formatMessage(msg.meta.companyTitle, {
     ticker: company.ticker,
     name: company.name,
   });
-  const description = formatMessage(msg.meta.companyDescription, {
+
+  const metricSnippets: string[] = [];
+  if (snapshot) {
+    if (snapshot.isCashFlowPositive) {
+      metricSnippets.push(msg.company.cashFlowPositive);
+    } else if (snapshot.cashRunwayMonths !== null) {
+      metricSnippets.push(
+        `${msg.company.cashRunway}: ~${snapshot.cashRunwayMonths.toFixed(1)} ${msg.company.monthsSuffix}`,
+      );
+    }
+    if (snapshot.totalLiquidityNative !== null || snapshot.totalLiquidityUsd !== null) {
+      metricSnippets.push(
+        `${msg.company.totalLiquidity}: ${formatCompactCurrency(
+          snapshot.totalLiquidityNative ?? snapshot.totalLiquidityUsd,
+          currency,
+          locale,
+        )}`,
+      );
+    }
+    if (!snapshot.possibleReverseSplit && snapshot.shareDilution1yPct !== null) {
+      metricSnippets.push(
+        `${msg.company.shareDilution1y}: ${formatPercent(snapshot.shareDilution1yPct)}`,
+      );
+    }
+  }
+
+  const baseDesc = formatMessage(msg.meta.companyDescription, {
     ticker: company.ticker,
     name: company.name,
   });
+  const description =
+    metricSnippets.length > 0
+      ? `${metricSnippets.join(" • ")}. ${baseDesc}`
+      : baseDesc;
 
   return {
     title,
@@ -73,6 +103,11 @@ export async function generateMetadata({
       siteName: "kkval.com",
       locale: getLocaleMeta(locale).intlCode,
       url: alternates.canonical,
+      title,
+      description,
+    },
+    twitter: {
+      card: "summary_large_image",
       title,
       description,
     },
@@ -109,10 +144,31 @@ export default async function StockPage({ params }: PageProps) {
     company.entityClass === "spac" || company.entityClass === "financial"
       ? msg.company.notApplicableSector
       : snapshot?.isCashFlowPositive
-        ? `${company.name} (${company.ticker}) ${msg.company.cashFlowPositive}.`
+        ? `${company.name} (${company.ticker}) ${msg.company.cashFlowPositive} (${formatCompactCurrency(snapshot.totalLiquidityNative ?? snapshot.totalLiquidityUsd, currency, locale)}).`
         : snapshot?.cashRunwayMonths !== null && snapshot?.cashRunwayMonths !== undefined
-          ? `${snapshot.cashRunwayMonths.toFixed(1)} ${msg.company.monthsSuffix} (${formatCompactCurrency(snapshot.totalLiquidityNative ?? snapshot.totalLiquidityUsd, currency, locale)}).`
+          ? `~${snapshot.cashRunwayMonths.toFixed(1)} ${msg.company.monthsSuffix} (${formatCompactCurrency(snapshot.totalLiquidityNative ?? snapshot.totalLiquidityUsd, currency, locale)}).`
           : "—";
+
+  const dilutionFaqAnswer = snapshot?.possibleReverseSplit
+    ? msg.company.reverseSplitFlag
+    : `${formatPercent(snapshot?.shareDilution1yPct)} (${msg.company.offeringFilings12m}: ${snapshot?.offeringFilings12m ?? 0}).`;
+
+  const insiderFaqAnswer = `${snapshot?.insiderBuyCount90d ?? 0} ${msg.company.insiderBuy} / ${snapshot?.insiderSellCount90d ?? 0} ${msg.company.insiderSell} (90d).`;
+
+  const faqItems = [
+    {
+      q: `${company.ticker} — ${msg.company.cashRunway}?`,
+      a: runwayFaqAnswer,
+    },
+    {
+      q: `${company.ticker} — ${msg.company.shareDilution1y}?`,
+      a: dilutionFaqAnswer,
+    },
+    {
+      q: `${company.ticker} — ${msg.company.insidersTitle}?`,
+      a: insiderFaqAnswer,
+    },
+  ];
 
   const jsonLd = [
     {
@@ -143,16 +199,14 @@ export default async function StockPage({ params }: PageProps) {
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: `${company.ticker} ${msg.company.cashRunway}?`,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: runwayFaqAnswer,
-          },
+      mainEntity: faqItems.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
         },
-      ],
+      })),
     },
   ];
 
@@ -420,6 +474,28 @@ export default async function StockPage({ params }: PageProps) {
           </div>
         </section>
       )}
+
+      {/* Visible FAQ matching FAQPage JSON-LD */}
+      <section className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900/70">
+        <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+          {msg.company.faqTitle}
+        </h2>
+        <dl className="mt-4 grid gap-4 sm:grid-cols-3">
+          {faqItems.map((item) => (
+            <div
+              key={item.q}
+              className="rounded-lg border border-zinc-200/70 bg-zinc-50/60 p-3 dark:border-zinc-800 dark:bg-zinc-950/50"
+            >
+              <dt className="text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+                {item.q}
+              </dt>
+              <dd className="tabular-nums mt-1.5 text-xs text-zinc-600 dark:text-zinc-400">
+                {item.a}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </section>
 
       {/* Peer Comparisons */}
       {peers.length > 0 && (

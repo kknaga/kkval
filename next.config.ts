@@ -31,7 +31,25 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        source: "/:locale(es|ko|pt|ja|zh-tw|de)/compare/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=86400, stale-while-revalidate=86400",
+          },
+        ],
+      },
+      {
         source: "/screen/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, s-maxage=43200, stale-while-revalidate=43200",
+          },
+        ],
+      },
+      {
+        source: "/:locale(es|ko|pt|ja|zh-tw|de)/screen/:path*",
         headers: [
           {
             key: "Cache-Control",

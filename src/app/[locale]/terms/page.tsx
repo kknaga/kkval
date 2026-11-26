@@ -1,8 +1,21 @@
 import type { Metadata } from "next";
+import { normalizeLocaleSlug } from "@/lib/i18n/locales";
+import { absoluteUrl } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Terms of Service | kkval.com",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale: rawLocale } = await params;
+  const locale = normalizeLocaleSlug(rawLocale) ?? "en";
+
+  return {
+    title: "Terms of Service | kkval.com",
+    alternates: { canonical: absoluteUrl("/terms") },
+    robots: locale === "en" ? undefined : { index: false, follow: true },
+  };
+}
 
 export default function TermsPage() {
   return (

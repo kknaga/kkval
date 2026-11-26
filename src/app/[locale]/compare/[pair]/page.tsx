@@ -79,22 +79,7 @@ export default async function ComparePairPage({ params }: PageProps) {
   ]);
 
   if (!profA || !profB) {
-    return (
-      <div className="mx-auto max-w-4xl space-y-4 px-4 py-12 sm:px-6">
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          {a} vs {b}
-        </h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
-          {msg.compare.notFound}
-        </p>
-        <Link
-          href={localizePath("/compare", locale)}
-          className="inline-block text-xs font-semibold text-emerald-700 hover:underline dark:text-emerald-400"
-        >
-          ← {msg.nav.compare}
-        </Link>
-      </div>
-    );
+    notFound();
   }
 
   const sA = profA.snapshot;
