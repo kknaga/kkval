@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
+import { cleanCompanyName } from "@/lib/format-stake-pct";
 import {
   formatCompactCurrency,
   formatPercent,
@@ -15,6 +16,7 @@ import {
   parseCompareSlug,
 } from "@/lib/seo";
 import { AdSlot } from "@/components/AdSlot";
+import { CompanyBadge } from "@/components/CompanyBadge";
 
 export const revalidate = 3600;
 
@@ -205,48 +207,58 @@ export default async function ComparePairPage({ params }: PageProps) {
   ];
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 px-4 py-8 sm:px-6">
-      <header className="space-y-2 border-b border-zinc-200 pb-5 dark:border-zinc-800">
-        <h1 className="text-2xl font-bold text-zinc-900 sm:text-3xl dark:text-zinc-50">
+    <div className="mx-auto max-w-6xl space-y-10 px-5 py-10 sm:px-8 sm:py-12">
+      <header className="space-y-2 border-b border-zinc-200 pb-6 dark:border-zinc-800">
+        <h1 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50">
           {formatMessage(msg.compare.heading, {
             tickerA: profA.company.ticker,
             tickerB: profB.company.ticker,
           })}
         </h1>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="max-w-2xl text-base text-zinc-500 dark:text-zinc-400">
           {msg.compare.subheading}
         </p>
       </header>
 
       <AdSlot variant="leaderboard" />
 
-      <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900/70">
+      <div className="overflow-x-auto rounded-2xl border border-zinc-200/90 bg-white dark:border-zinc-800 dark:bg-zinc-900/70">
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-zinc-200 bg-zinc-50/70 dark:border-zinc-800 dark:bg-zinc-950/50">
-              <th className="px-4 py-3 text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+              <th className="px-5 py-4 text-xs font-semibold text-zinc-500 dark:text-zinc-400">
                 {msg.compare.metricCol}
               </th>
-              <th className="px-4 py-3 font-bold">
-                <Link
-                  href={localizePath(`/stock/${profA.company.ticker}`, locale)}
-                  className="font-mono text-emerald-700 hover:underline dark:text-emerald-400"
-                >
-                  {profA.company.ticker}
-                </Link>
-                <div className="text-xs font-normal text-zinc-500 dark:text-zinc-400">
-                  {profA.company.name}
+              <th className="px-5 py-4 font-bold">
+                <div className="flex items-center gap-3">
+                  <CompanyBadge ticker={profA.company.ticker} size="md" />
+                  <div>
+                    <Link
+                      href={localizePath(`/stock/${profA.company.ticker}`, locale)}
+                      className="font-mono text-emerald-700 hover:underline dark:text-emerald-400"
+                    >
+                      {profA.company.ticker}
+                    </Link>
+                    <div className="text-xs font-normal text-zinc-500 dark:text-zinc-400">
+                      {cleanCompanyName(profA.company.name) || profA.company.name}
+                    </div>
+                  </div>
                 </div>
               </th>
-              <th className="px-4 py-3 font-bold">
-                <Link
-                  href={localizePath(`/stock/${profB.company.ticker}`, locale)}
-                  className="font-mono text-emerald-700 hover:underline dark:text-emerald-400"
-                >
-                  {profB.company.ticker}
-                </Link>
-                <div className="text-xs font-normal text-zinc-500 dark:text-zinc-400">
-                  {profB.company.name}
+              <th className="px-5 py-4 font-bold">
+                <div className="flex items-center gap-3">
+                  <CompanyBadge ticker={profB.company.ticker} size="md" />
+                  <div>
+                    <Link
+                      href={localizePath(`/stock/${profB.company.ticker}`, locale)}
+                      className="font-mono text-emerald-700 hover:underline dark:text-emerald-400"
+                    >
+                      {profB.company.ticker}
+                    </Link>
+                    <div className="text-xs font-normal text-zinc-500 dark:text-zinc-400">
+                      {cleanCompanyName(profB.company.name) || profB.company.name}
+                    </div>
+                  </div>
                 </div>
               </th>
             </tr>
@@ -254,11 +266,11 @@ export default async function ComparePairPage({ params }: PageProps) {
           <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/70">
             {rows.map((r) => (
               <tr key={r.label}>
-                <td className="px-4 py-3 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+                <td className="px-5 py-4 text-sm font-medium text-zinc-600 dark:text-zinc-400">
                   {r.label}
                 </td>
                 <td
-                  className={`tabular-nums px-4 py-3 text-sm font-semibold ${
+                  className={`tabular-nums px-5 py-4 text-sm font-semibold ${
                     r.winner === "A"
                       ? "text-emerald-700 dark:text-emerald-400"
                       : "text-zinc-800 dark:text-zinc-200"
@@ -267,7 +279,7 @@ export default async function ComparePairPage({ params }: PageProps) {
                   {r.valA}
                 </td>
                 <td
-                  className={`tabular-nums px-4 py-3 text-sm font-semibold ${
+                  className={`tabular-nums px-5 py-4 text-sm font-semibold ${
                     r.winner === "B"
                       ? "text-emerald-700 dark:text-emerald-400"
                       : "text-zinc-800 dark:text-zinc-200"

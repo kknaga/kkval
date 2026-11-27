@@ -22,27 +22,27 @@ export function ProvenanceTable({
   if (rows.length === 0) return null;
 
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900/70">
-      <h2 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+    <section className="rounded-2xl border border-zinc-200/90 bg-white p-6 sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/70">
+      <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
         {msg.provenanceTitle}
       </h2>
-      <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+      <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">
         {msg.provenanceNote}
       </p>
 
-      <div className="mt-4 overflow-x-auto">
-        <table className="w-full text-left text-xs">
+      <div className="mt-6 overflow-x-auto">
+        <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
-              <th className="py-2 pr-3 font-medium">{msg.colDate}</th>
-              <th className="py-2 pr-3 font-medium text-right">{msg.metricRevenue}</th>
-              <th className="py-2 pr-3 font-medium text-right">{msg.metricNetIncome}</th>
-              <th className="py-2 pr-3 font-medium text-right">{msg.metricCash}</th>
-              <th className="py-2 pr-3 font-medium text-right">{msg.metricOcf}</th>
-              <th className="py-2 pr-3 font-medium text-right">{msg.metricFcf}</th>
-              <th className="py-2 pr-3 font-medium text-right">{msg.metricDebt}</th>
-              <th className="py-2 pr-3 font-medium text-right">{msg.metricShares}</th>
-              <th className="py-2 font-medium text-right">{msg.colFiling}</th>
+            <tr className="border-b border-zinc-200 text-xs font-medium text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+              <th className="py-3 pr-4 font-medium">{msg.colDate}</th>
+              <th className="py-3 pr-4 font-medium text-right">{msg.metricRevenue}</th>
+              <th className="py-3 pr-4 font-medium text-right">{msg.metricNetIncome}</th>
+              <th className="py-3 pr-4 font-medium text-right">{msg.metricCash}</th>
+              <th className="py-3 pr-4 font-medium text-right">{msg.metricOcf}</th>
+              <th className="py-3 pr-4 font-medium text-right">{msg.metricFcf}</th>
+              <th className="py-3 pr-4 font-medium text-right">{msg.metricDebt}</th>
+              <th className="py-3 pr-4 font-medium text-right">{msg.metricShares}</th>
+              <th className="py-3 font-medium text-right">{msg.colFiling}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-zinc-100 dark:divide-zinc-800/70">
@@ -58,49 +58,49 @@ export function ProvenanceTable({
 
               return (
                 <tr key={`${p.periodType}-${p.periodEnd}`}>
-                  <td className="tabular-nums whitespace-nowrap py-2.5 pr-3 font-medium text-zinc-800 dark:text-zinc-200">
+                  <td className="tabular-nums whitespace-nowrap py-4 pr-4 font-medium text-zinc-800 dark:text-zinc-200">
                     {p.periodEnd}
                   </td>
                   <td
-                    className="tabular-nums whitespace-nowrap py-2.5 pr-3 text-right"
+                    className="tabular-nums whitespace-nowrap py-4 pr-4 text-right"
                     title={p.provenanceJson.revenue?.tag}
                   >
                     {formatCompactCurrency(p.revenue, currency, locale)}
                   </td>
                   <td
-                    className="tabular-nums whitespace-nowrap py-2.5 pr-3 text-right"
+                    className="tabular-nums whitespace-nowrap py-4 pr-4 text-right"
                     title={p.provenanceJson.netIncome?.tag}
                   >
                     {formatCompactCurrency(p.netIncome, currency, locale)}
                   </td>
                   <td
-                    className="tabular-nums whitespace-nowrap py-2.5 pr-3 text-right"
+                    className="tabular-nums whitespace-nowrap py-4 pr-4 text-right"
                     title={p.provenanceJson.totalLiquidity?.tag}
                   >
                     {formatCompactCurrency(p.totalLiquidity, currency, locale)}
                   </td>
                   <td
-                    className="tabular-nums whitespace-nowrap py-2.5 pr-3 text-right"
+                    className="tabular-nums whitespace-nowrap py-4 pr-4 text-right"
                     title={p.provenanceJson.operatingCashFlow?.tag}
                   >
                     {formatCompactCurrency(p.operatingCashFlow, currency, locale)}
                   </td>
-                  <td className="tabular-nums whitespace-nowrap py-2.5 pr-3 text-right">
+                  <td className="tabular-nums whitespace-nowrap py-4 pr-4 text-right">
                     {formatCompactCurrency(p.freeCashFlow, currency, locale)}
                   </td>
                   <td
-                    className="tabular-nums whitespace-nowrap py-2.5 pr-3 text-right"
+                    className="tabular-nums whitespace-nowrap py-4 pr-4 text-right"
                     title={p.provenanceJson.totalDebt?.tag}
                   >
                     {formatCompactCurrency(p.totalDebt, currency, locale)}
                   </td>
                   <td
-                    className="tabular-nums whitespace-nowrap py-2.5 pr-3 text-right"
+                    className="tabular-nums whitespace-nowrap py-4 pr-4 text-right"
                     title={p.provenanceJson.sharesOutstanding?.tag}
                   >
                     {formatCompactNumber(p.sharesOutstanding, locale)}
                   </td>
-                  <td className="whitespace-nowrap py-2.5 text-right">
+                  <td className="whitespace-nowrap py-4 text-right">
                     {secUrl && primaryProv ? (
                       <a
                         href={secUrl}

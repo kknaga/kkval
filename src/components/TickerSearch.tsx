@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
+import { cleanCompanyName } from "@/lib/format-stake-pct";
 import { localizePath } from "@/lib/i18n/locales";
 
 interface SearchHit {
@@ -87,10 +88,10 @@ export function TickerSearch({
 
   return (
     <div ref={containerRef} className="relative w-full">
-      <form onSubmit={onSubmit} className="flex w-full items-center gap-2">
+      <form onSubmit={onSubmit} className="flex w-full items-center gap-2.5">
         <div className="relative flex-1">
           <Search
-            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"
+            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400"
             aria-hidden="true"
           />
           <input
@@ -119,15 +120,15 @@ export function TickerSearch({
             }}
             placeholder={placeholder}
             aria-label={placeholder}
-            className={`w-full rounded-lg border border-zinc-200 bg-white pl-9 pr-3 text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 ${
-              compact ? "h-8 text-xs" : "h-11 text-sm"
+            className={`w-full border border-zinc-200 bg-white pl-10 pr-4 text-zinc-900 placeholder:text-zinc-400 focus:border-emerald-500 focus:outline-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 ${
+              compact ? "h-9 rounded-lg text-xs" : "h-12 rounded-xl text-sm shadow-xs"
             }`}
           />
         </div>
         {!compact && (
           <button
             type="submit"
-            className="inline-flex h-11 shrink-0 items-center justify-center rounded-lg bg-emerald-600 px-5 text-sm font-semibold text-white transition-colors hover:bg-emerald-500"
+            className="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-emerald-600 px-6 text-sm font-semibold text-white transition-colors hover:bg-emerald-500"
           >
             {buttonLabel}
           </button>
@@ -137,14 +138,14 @@ export function TickerSearch({
       {open && hits.length > 0 && (
         <ul
           role="listbox"
-          className="absolute left-0 right-0 top-full z-40 mt-1.5 max-h-72 overflow-y-auto rounded-lg border border-zinc-200 bg-white p-1 shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
+          className="absolute left-0 right-0 top-full z-40 mt-2 max-h-80 overflow-y-auto rounded-xl border border-zinc-200 bg-white p-1.5 shadow-xl dark:border-zinc-800 dark:bg-zinc-900"
         >
           {hits.map((h, idx) => (
             <li key={h.ticker}>
               <button
                 type="button"
                 onClick={() => navigateToTicker(h.ticker)}
-                className={`flex w-full items-center justify-between gap-3 rounded-md px-3 py-2 text-left text-sm transition-colors ${
+                className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors ${
                   idx === activeIdx
                     ? "bg-zinc-100 dark:bg-zinc-800"
                     : "hover:bg-zinc-100 dark:hover:bg-zinc-800"
@@ -155,7 +156,7 @@ export function TickerSearch({
                     {h.ticker}
                   </span>
                   <span className="truncate text-zinc-800 dark:text-zinc-200">
-                    {h.name}
+                    {cleanCompanyName(h.name) || h.name}
                   </span>
                 </div>
                 {h.exchange && (

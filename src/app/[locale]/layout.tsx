@@ -8,7 +8,7 @@ import {
   normalizeLocaleSlug,
 } from "@/lib/i18n/locales";
 import { getMessages } from "@/lib/i18n/messages";
-import { buildAbsoluteLocaleAlternates } from "@/lib/seo";
+import { buildAbsoluteLocaleAlternates, KKSTAKE_URL } from "@/lib/seo";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { TickerSearch } from "@/components/TickerSearch";
@@ -56,8 +56,8 @@ export default async function LocaleLayout({
   return (
     <>
       <header className="sticky top-0 z-30 border-b border-zinc-200/80 bg-white/95 backdrop-blur-sm dark:border-zinc-800/80 dark:bg-zinc-950/95">
-        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6">
-          <div className="flex items-center gap-4">
+        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5 sm:px-8">
+          <div className="flex items-center gap-6">
             <Link
               href={localizePath("/", locale)}
               className="inline-flex shrink-0 items-center gap-2 text-zinc-900 transition-opacity hover:opacity-85 dark:text-zinc-100"
@@ -79,7 +79,7 @@ export default async function LocaleLayout({
               </span>
             </Link>
 
-            <nav className="hidden items-center gap-4 text-xs font-medium text-zinc-600 md:flex dark:text-zinc-300">
+            <nav className="hidden items-center gap-6 text-sm font-medium text-zinc-600 md:flex dark:text-zinc-300">
               <Link
                 href={localizePath("/screen", locale)}
                 className="hover:text-zinc-900 dark:hover:text-zinc-100"
@@ -126,10 +126,10 @@ export default async function LocaleLayout({
       <main className="flex-1">{children}</main>
 
       <footer className="border-t border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950">
-        <div className="mx-auto max-w-7xl space-y-3 px-4 py-8 sm:px-6">
+        <div className="mx-auto max-w-6xl space-y-4 px-5 py-10 sm:px-8">
           <nav
             aria-label="Footer"
-            className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-medium text-zinc-600 dark:text-zinc-300"
+            className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm font-medium text-zinc-600 dark:text-zinc-300"
           >
             <Link
               href={localizePath("/screen", locale)}
@@ -138,11 +138,25 @@ export default async function LocaleLayout({
               {messages.nav.screeners}
             </Link>
             <Link
+              href={localizePath("/compare", locale)}
+              className="hover:text-zinc-900 hover:underline underline-offset-4 dark:hover:text-zinc-100"
+            >
+              {messages.nav.compare}
+            </Link>
+            <Link
               href={localizePath("/methodology", locale)}
               className="hover:text-zinc-900 hover:underline underline-offset-4 dark:hover:text-zinc-100"
             >
               {messages.footer.methodology}
             </Link>
+            <a
+              href={KKSTAKE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-zinc-900 hover:underline underline-offset-4 dark:hover:text-zinc-100"
+            >
+              kkstake.com
+            </a>
             <Link
               href="/privacy"
               className="hover:text-zinc-900 hover:underline underline-offset-4 dark:hover:text-zinc-100"

@@ -56,19 +56,19 @@ export function HealthCheckCard({
   const summary = renderHealthSummary(snapshot.summaryDataJson, locale);
 
   return (
-    <section className="rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900/80">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-zinc-200 pb-4 dark:border-zinc-800">
+    <section className="rounded-2xl border border-zinc-200/90 bg-white p-6 shadow-xs sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/80">
+      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200/80 pb-5 dark:border-zinc-800">
         <div>
-          <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+          <h2 className="text-lg font-bold text-zinc-900 dark:text-zinc-100">
             {msg.company.healthCheckTitle}
           </h2>
-          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
             {msg.entityClass[company.entityClass]}
             {company.sicDescription ? ` • ${company.sicDescription}` : ""}
           </p>
         </div>
         <span
-          className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${
+          className={`inline-flex items-center rounded-full border px-4 py-1.5 text-xs font-semibold ${
             VERDICT_STYLES[snapshot.verdict] ?? VERDICT_STYLES.watch
           }`}
         >
@@ -76,25 +76,25 @@ export function HealthCheckCard({
         </span>
       </div>
 
-      <p className="mt-4 text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
+      <p className="mt-5 max-w-3xl text-sm leading-relaxed text-zinc-600 sm:text-base dark:text-zinc-300">
         {summary}
       </p>
 
-      <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        <div className="rounded-lg border border-zinc-200/80 bg-zinc-50/70 p-3 dark:border-zinc-800 dark:bg-zinc-950/60">
-          <div className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+      <div className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/70 p-5 dark:border-zinc-800 dark:bg-zinc-950/60">
+          <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
             {msg.company.cashRunway}
           </div>
-          <div className="tabular-nums mt-1 text-base font-bold text-zinc-900 dark:text-zinc-100">
+          <div className="tabular-nums mt-2 text-2xl font-bold text-zinc-900 sm:text-3xl dark:text-zinc-100">
             {runwayDisplay}
           </div>
         </div>
 
-        <div className="rounded-lg border border-zinc-200/80 bg-zinc-50/70 p-3 dark:border-zinc-800 dark:bg-zinc-950/60">
-          <div className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+        <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/70 p-5 dark:border-zinc-800 dark:bg-zinc-950/60">
+          <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
             {msg.company.totalLiquidity}
           </div>
-          <div className="tabular-nums mt-1 text-base font-bold text-zinc-900 dark:text-zinc-100">
+          <div className="tabular-nums mt-2 text-2xl font-bold text-zinc-900 sm:text-3xl dark:text-zinc-100">
             {formatCompactCurrency(
               snapshot.totalLiquidityNative ?? snapshot.totalLiquidityUsd,
               currency,
@@ -103,20 +103,20 @@ export function HealthCheckCard({
           </div>
         </div>
 
-        <div className="rounded-lg border border-zinc-200/80 bg-zinc-50/70 p-3 dark:border-zinc-800 dark:bg-zinc-950/60">
-          <div className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+        <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/70 p-5 dark:border-zinc-800 dark:bg-zinc-950/60">
+          <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
             {msg.company.shareDilution1y}
           </div>
-          <div className="tabular-nums mt-1 text-base font-bold text-zinc-900 dark:text-zinc-100">
+          <div className="tabular-nums mt-2 text-2xl font-bold text-zinc-900 sm:text-3xl dark:text-zinc-100">
             {dilutionDisplay}
           </div>
         </div>
 
-        <div className="rounded-lg border border-zinc-200/80 bg-zinc-50/70 p-3 dark:border-zinc-800 dark:bg-zinc-950/60">
-          <div className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+        <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/70 p-5 dark:border-zinc-800 dark:bg-zinc-950/60">
+          <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
             {msg.company.ttmFreeCashFlow}
           </div>
-          <div className="tabular-nums mt-1 text-base font-bold text-zinc-900 dark:text-zinc-100">
+          <div className="tabular-nums mt-2 text-2xl font-bold text-zinc-900 sm:text-3xl dark:text-zinc-100">
             {formatCompactCurrency(
               snapshot.fcfTtmNative ?? snapshot.fcfTtmUsd,
               currency,
@@ -125,33 +125,33 @@ export function HealthCheckCard({
           </div>
         </div>
 
-        <div className="rounded-lg border border-zinc-200/80 bg-zinc-50/70 p-3 dark:border-zinc-800 dark:bg-zinc-950/60">
-          <div className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+        <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/70 p-5 dark:border-zinc-800 dark:bg-zinc-950/60">
+          <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
             {msg.company.debtVsCash}
           </div>
-          <div className="tabular-nums mt-1 text-base font-bold text-zinc-900 dark:text-zinc-100">
+          <div className="tabular-nums mt-2 text-2xl font-bold text-zinc-900 sm:text-3xl dark:text-zinc-100">
             {snapshot.debtToCashRatio !== null
               ? `${snapshot.debtToCashRatio.toFixed(2)}x`
               : "—"}
           </div>
         </div>
 
-        <div className="rounded-lg border border-zinc-200/80 bg-zinc-50/70 p-3 dark:border-zinc-800 dark:bg-zinc-950/60">
-          <div className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+        <div className="rounded-2xl border border-zinc-200/80 bg-zinc-50/70 p-5 dark:border-zinc-800 dark:bg-zinc-950/60">
+          <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
             {msg.company.offeringFilings12m}
           </div>
-          <div className="tabular-nums mt-1 text-base font-bold text-zinc-900 dark:text-zinc-100">
+          <div className="tabular-nums mt-2 text-2xl font-bold text-zinc-900 sm:text-3xl dark:text-zinc-100">
             {snapshot.offeringFilings12m}
           </div>
         </div>
       </div>
 
       {snapshot.warningsJson.length > 0 && (
-        <ul className="mt-4 space-y-1.5 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+        <ul className="mt-6 space-y-2.5 border-t border-zinc-200 pt-5 dark:border-zinc-800">
           {snapshot.warningsJson.map((w, idx) => (
             <li
               key={`${w.code}-${idx}`}
-              className="flex items-start gap-2.5 text-xs text-zinc-700 dark:text-zinc-300"
+              className="flex items-start gap-2.5 text-sm text-zinc-700 dark:text-zinc-300"
             >
               <span
                 className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${

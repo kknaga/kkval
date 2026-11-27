@@ -242,6 +242,7 @@ export async function getHomePageData(): Promise<{
     filingDate: string;
     totalValueUsd: number | null;
     shares: number;
+    sharesAfter: number | null;
   }>;
   popularTickers: Array<{ ticker: string; name: string }>;
 }> {
@@ -275,6 +276,7 @@ export async function getHomePageData(): Promise<{
           filingDate: insiderTransactions.filingDate,
           totalValueUsd: insiderTransactions.totalValueUsd,
           shares: insiderTransactions.shares,
+          sharesAfter: insiderTransactions.sharesAfter,
         })
         .from(insiderTransactions)
         .innerJoin(companies, eq(insiderTransactions.cik, companies.cik))

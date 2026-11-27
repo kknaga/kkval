@@ -102,7 +102,7 @@ export async function GET(
   const chunkId = Number.parseInt(match[1], 10);
   if (chunkId > 0) {
     const total = await getIndexableCount();
-    const maxChunk = Math.max(1, Math.ceil(total / COMPANIES_PER_SITEMAP));
+    const maxChunk = Math.ceil(total / COMPANIES_PER_SITEMAP);
     if (chunkId > maxChunk) {
       return new Response("Not found", { status: 404 });
     }

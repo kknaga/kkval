@@ -42,24 +42,28 @@ export default async function CompareIndexPage({
   const msg = getMessages(locale);
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 px-4 py-10 sm:px-6">
-      <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-        {msg.home.compareHeading}
-      </h1>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400">
-        {msg.compare.tryPair}
-      </p>
+    <div className="mx-auto max-w-6xl space-y-10 px-5 py-10 sm:px-8 sm:py-12">
+      <header className="space-y-2 border-b border-zinc-200 pb-6 dark:border-zinc-800">
+        <h1 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50">
+          {msg.home.compareHeading}
+        </h1>
+        <p className="max-w-2xl text-base text-zinc-500 dark:text-zinc-400">
+          {msg.compare.tryPair}
+        </p>
+      </header>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {POPULAR_PAIRS.map(([a, b]) => {
           const [first, second] = a <= b ? [a, b] : [b, a];
           return (
             <Link
               key={`${first}-${second}`}
               href={localizePath(`/compare/${first}-vs-${second}`, locale)}
-              className="rounded-xl border border-zinc-200 bg-white p-4 font-mono text-sm font-bold text-zinc-900 transition-colors hover:border-emerald-500 dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-100"
+              className="block h-full"
             >
-              {first} vs {second}
+              <article className="rounded-2xl border border-zinc-200/90 bg-white p-6 font-mono text-base font-bold text-zinc-900 transition-all hover:border-emerald-500/70 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/70 dark:text-zinc-100">
+                {first} vs {second}
+              </article>
             </Link>
           );
         })}

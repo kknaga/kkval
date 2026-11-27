@@ -14,7 +14,7 @@ function escapeXml(str: string): string {
 
 export async function GET() {
   const total = await getIndexableCount();
-  const companyChunks = Math.max(1, Math.ceil(total / COMPANIES_PER_SITEMAP));
+  const companyChunks = Math.ceil(total / COMPANIES_PER_SITEMAP);
   const lastmod = new Date().toISOString();
 
   const locs: string[] = [`${SITE_URL}/sitemaps/0.xml`];

@@ -7,6 +7,10 @@ import {
 export const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/+$/, "") || "https://kkval.com";
 
+export const KKSTAKE_URL =
+  process.env.NEXT_PUBLIC_KKSTAKE_URL?.replace(/\/+$/, "") ||
+  "https://kkstake.com";
+
 export const COMPANIES_PER_SITEMAP = 2_500;
 
 export function absoluteUrl(pathname: string): string {
